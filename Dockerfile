@@ -11,6 +11,8 @@ RUN git clone https://github.com/Netflix/conductor.git && \
 
 RUN pip3 install conductor/client/python
 
+COPY workers/* /usr/bin/workers
+
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
