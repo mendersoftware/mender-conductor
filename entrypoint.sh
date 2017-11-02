@@ -23,4 +23,4 @@ if [ "$up" -ne 1 ]; then
     exit 1
 fi
 
-wait
+/usr/bin/supervisord
