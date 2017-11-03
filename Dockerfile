@@ -11,6 +11,7 @@ RUN git clone https://github.com/Netflix/conductor.git && \
     git checkout v1.8.1
 
 RUN pip3 install conductor/client/python
+RUN pip3 install configargparse
 
 COPY workers /usr/bin/workers/
 
