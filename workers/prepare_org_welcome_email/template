@@ -1,0 +1,30 @@
+Hi,
+
+Welcome to the Hosted Mender beta program!
+
+Your Hosted Mender account is ready and your account and usage information are below.
+
+Email: $email
+
+Please login at https://hosted.mender.io
+
+To change your password click your email top right and then select "My Account".
+
+There are no devices connected to your account. We have attached several tutorials on how to connect various types of devices to this email:
+
+* Connect virtual devices. We recommend that you start off with this tutorial to make sure your account works correctly.
+* Connect physical devices. If you have a BeagleBone Black or Raspberry Pi 3 you can test it using our prebuilt images for your account.
+* Integrate into Yocto Project build. Shows you how to configure the Mender client in your existing Yocto Project build environment to connect it to Hosted Mender.
+
+If at any point you have questions or run into issues please do not hesitate to contact me (just reply to this email).
+
+Known issues
+
+Device decommissioning currently does not work properly, so any devices you add to Hosted Mender can not be removed.
+This issue should be resolved within a day or two, no action is needed on your part.
+
+Limitations
+
+This beta environment is for testing purposes. Data saved there may not persist. If necessary, the environment may be decommissioned or reset after the beta period. We will announce plans to reset the environment in advance and work to make it possible for devices to be migrated to the Hosted Mender production environment.
+
+We are monitoring the resource usage of the environment. If you plan to connect more than 10 devices simultaneously or upload more than 10 Artifacts, please let us know in advance. Your account may be suspended at any time due to indication of abuse.
