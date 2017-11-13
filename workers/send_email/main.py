@@ -14,7 +14,7 @@ conf = config.get_config()
 
 
 def send_email(recipient, title, body):
-    message = 'From: {}\n Subject: {}\n\n{}'.format(recipient, title, body)
+    message = 'To: {}\n Subject: {}\n\n{}'.format(recipient, title, body)
     server = smtplib.SMTP(conf.smtpaddress)
     server.ehlo()
     server.starttls()
