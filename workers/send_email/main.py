@@ -14,7 +14,10 @@ conf = config.get_config()
 
 
 def send_email(recipient, title, body):
-    message = 'To: {}\n Subject: {}\n\n{}'.format(recipient, title, body)
+    if conf.demo == "true":
+        log.info("Demo mode on. Intercepted send email request with recipient: {}\nTitle: {}\nBody:\n{}".format(recipient, title, body))
+        return
+    message = 'To: {}\nSubject: {}\n\n{}'.format(recipient, title, body)
     server = smtplib.SMTP(conf.smtpaddress)
     server.ehlo()
     server.starttls()
