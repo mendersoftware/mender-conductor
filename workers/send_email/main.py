@@ -28,7 +28,7 @@ def send_email(recipient, title, body):
 
 def send_email_task(task):
     try:
-        send_email(task['inputData']['email'], task['inputData']['topic'], task['inputData']['body'])
+        send_email(task['inputData']['email'], task['inputData']['title'], task['inputData']['body'])
 
         # always return this well formed response- status, output, logs
         return {'status': 'COMPLETED',
