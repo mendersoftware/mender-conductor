@@ -14,10 +14,10 @@ def send_email(recipient, title, body, conf):
         return
     message = 'From: {}\nTo: {}\nSubject: {}\n\n{}'.format(conf.emailsender, recipient, title, body)
     server = smtplib.SMTP(conf.smtpaddress)
-    server.ehlo()
+
     if conf.smtpssl == "true":
         server.starttls()
     if conf.smtplogin and len(conf.smtplogin) > 0:
         server.login(conf.smtplogin, conf.smtppassword)
-    server.sendmail(conf.emailsender, recipient, message)
+    server.sendmail(conf.emailsender, recipient, message.encode("UTF8"), ['SMTPUTF8'])
     server.quit()
