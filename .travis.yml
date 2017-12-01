@@ -6,6 +6,7 @@ services:
 env:
     global:
         - DOCKER_REPOSITORY="mendersoftware/conductor-workers"
+        - DOCKER_REPOSITORY_ARTIFACT_CREATOR="mendersoftware/saas-artifact-creator"
 
 before_script:
     # Rename the branch we're on, so that it's not in the way for the
@@ -26,20 +27,27 @@ script:
 
     # Build docker image from docker file
     - sudo docker build -t $DOCKER_REPOSITORY .
-
+    - ( cd workers/artifact_creator && sudo docker build -t $DOCKER_REPOSITORY_ARTIFACT_CREATOR . )
+ 
 before_deploy:
     # Master is always lastest
     - if [ ! -z "$TRAVIS_TAG" ]; then export IMAGE_TAG=$TRAVIS_TAG; else export IMAGE_TAG=$TRAVIS_BRANCH; fi
     - docker tag $DOCKER_REPOSITORY $DOCKER_REPOSITORY:$IMAGE_TAG
+    - docker tag $DOCKER_REPOSITORY_ARTIFACT_CREATOR $DOCKER_REPOSITORY_ARTIFACT_CREATOR:$IMAGE_TAG
+
 
     # Upload image to docker registry only on PUSH
     - docker login --email=$DOCKER_HUB_EMAIL --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
     - docker push $DOCKER_REPOSITORY:$IMAGE_TAG
+    - docker push $DOCKER_REPOSITORY_ARTIFACT_CREATOR:$IMAGE_TAG
 
     - if [ "$TRAVIS_BRANCH" = master ]; then
         export COMMIT_TAG="$TRAVIS_BRANCH"_"$TRAVIS_COMMIT";
         docker tag $DOCKER_REPOSITORY $DOCKER_REPOSITORY:$COMMIT_TAG;
         docker push $DOCKER_REPOSITORY:$COMMIT_TAG;
+
+        docker tag $DOCKER_REPOSITORY_ARTIFACT_CREATOR $DOCKER_REPOSITORY_ARTIFACT_CREATOR:$COMMIT_TAG;
+        docker push $DOCKER_REPOSITORY_ARTIFACT_CREATOR:$COMMIT_TAG;
       fi;
 
 deploy:
