@@ -5,23 +5,43 @@ Welcome to the Hosted Mender beta program!
 Your Hosted Mender account is ready and your account and usage information are below.
 
 Email: $email
+Password: Set during signup. Contact us if you need to reset it.
 
-Please login at https://hosted.mender.io
+Please login at https://hosted.mender.io.
 
-To change your password click your email top right and then select "My Account".
+We have several interactive tutorials for you to test Hosted Mender, and we recommend starting with the first one:
 
-There are no devices connected to your account. We have attached several tutorials on how to connect various types of devices to this email:
 
-* Connect virtual devices. We recommend that you start off with this tutorial to make sure your account works correctly.
-* Connect physical devices. If you have a BeagleBone Black or Raspberry Pi 3 you can test it using our prebuilt images for your account.
-* Integrate into Yocto Project build. Shows you how to configure the Mender client in your existing Yocto Project build environment to connect it to Hosted Mender.
+1) Deploy to virtual device (estimated time: 10 minutes)
 
-If at any point you have questions or run into issues please do not hesitate to contact me (just reply to this email).
+There is one virtual device already connected to your account. There is also one Artifact for your virtual device already uploaded so you can start testing right away. Follow the onboarding help tips after you log in (click on the small question marks) to complete your first deployment with Mender!
 
-Known issues
+Note that your virtual device expires in two weeks, so make sure to start testing soon! You may remove the existing demo Artifacts and decommission your virtual device when you are done testing this part.
 
-Device decommissioning currently does not work properly, so any devices you add to Hosted Mender can not be removed.
-This issue should be resolved within a day or two, no action is needed on your part.
+
+2) Raspberry Pi 3 demo (estimated time: 20 minutes)
+
+If you have a Raspberry Pi 3, you can use the images we have already built for your account. The Help section has steps on how to deploy updates to your Raspberry Pi 3 from Hosted Mender.
+
+Please ensure you are logged in to Hosted Mender and open this URL: https://hosted.mender.io/ui/#/help/connecting-devices/provision-a-demo/raspberry-pi-3
+
+
+3) Beaglebone Black demo (estimated time: 20 minutes)
+
+If you have a BeagleBone Black, you can use the images we have already built for your account. The Help section has steps on how to deploy updates to your BeagleBone Black from Hosted Mender.
+
+Please ensure you are logged in to Hosted Mender and open this URL: https://hosted.mender.io/ui/#/help/connecting-devices/provision-a-demo/beagleboneblack
+
+
+4) Yocto Project integration
+
+If you already have a Yocto Project build environment for your device, you can include Mender into it and enable OTA updates for your project using Hosted Mender. Start here to see how to enable OTA updates for your project.
+
+Please ensure you are logged in to Hosted Mender and open this URL: https://hosted.mender.io/ui/#/help/connecting-devices/build-with-yocto
+
+
+If at any point you have questions or run into issues please do not hesitate to contact us at contact@mender.io.
+
 
 Limitations
 
