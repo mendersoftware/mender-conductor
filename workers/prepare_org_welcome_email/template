@@ -21,23 +21,23 @@ Note that your virtual device expires in two weeks, so make sure to start testin
 
 2) Raspberry Pi 3 demo (estimated time: 20 minutes)
 
-If you have a Raspberry Pi 3, you can use the images we have already built for your account. The Help section has steps on how to deploy updates to your Raspberry Pi 3 from Hosted Mender.
+If you have a Raspberry Pi 3, you can use the images we have already built for your account.
 
-Please ensure you are logged in to Hosted Mender and open this URL: https://hosted.mender.io/ui/#/help/connecting-devices/provision-a-demo/raspberry-pi-3
+Follow these steps to deploy updates to your Raspberry Pi 3 from Hosted Mender: https://hosted.mender.io/ui/#/help/connecting-devices/provision-a-demo/raspberry-pi-3
 
 
 3) Beaglebone Black demo (estimated time: 20 minutes)
 
-If you have a BeagleBone Black, you can use the images we have already built for your account. The Help section has steps on how to deploy updates to your BeagleBone Black from Hosted Mender.
+If you have a BeagleBone Black, you can use the images we have already built for your account.
 
-Please ensure you are logged in to Hosted Mender and open this URL: https://hosted.mender.io/ui/#/help/connecting-devices/provision-a-demo/beagleboneblack
+Follow these steps to deploy updates to your BeagleBone Black from Hosted Mender: https://hosted.mender.io/ui/#/help/connecting-devices/provision-a-demo/beagleboneblack
 
 
 4) Yocto Project integration
 
-If you already have a Yocto Project build environment for your device, you can include Mender into it and enable OTA updates for your project using Hosted Mender. Start here to see how to enable OTA updates for your project.
+If you already have a Yocto Project build environment for your device, you can include Mender into it and enable OTA updates for your project using Hosted Mender.
 
-Please ensure you are logged in to Hosted Mender and open this URL: https://hosted.mender.io/ui/#/help/connecting-devices/build-with-yocto
+Start here to see how to enable OTA updates for your project: https://hosted.mender.io/ui/#/help/connecting-devices/build-with-yocto
 
 
 If at any point you have questions or run into issues please do not hesitate to contact us at contact@mender.io.
