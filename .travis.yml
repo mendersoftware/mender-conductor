@@ -3,57 +3,107 @@ sudo: required
 services:
     - docker
 
-env:
-    global:
-        - DOCKER_REPOSITORY="mendersoftware/conductor-workers"
+stages:
+    - Check commits
+    - Build and Push
 
-before_script:
-    # Rename the branch we're on, so that it's not in the way for the
-    # subsequent fetch. It's ok if this fails, it just means we're not on any
-    # branch.
-    - git branch -m temp-branch || true
-    # Git trick: Fetch directly into our local branches instead of remote
-    # branches.
-    - git fetch origin 'refs/heads/*:refs/heads/*'
-    # Get last remaining tags, if any.
-    - git fetch --tags origin
+jobs:
+    include:
 
-    - git clone git://github.com/mendersoftware/mendertesting
+    - stage: Check commits
+      before_script:
+          # Rename the branch we're on, so that it's not in the way for the
+          # subsequent fetch. It's ok if this fails, it just means we're not on any
+          # branch.
+          - git branch -m temp-branch || true
+            # Git trick: Fetch directly into our local branches instead of remote
+            # branches.
+          - git fetch origin 'refs/heads/*:refs/heads/*'
+            # Get last remaining tags, if any.
+          - git fetch --tags origin
 
-script:
-    # Check commit compliance.
-    - mendertesting/check_commits.sh
+          - git clone git://github.com/mendersoftware/mendertesting
 
-    # Build docker image from docker file
-    - sudo docker build -t $DOCKER_REPOSITORY .
+      script:
+          # Check commit compliance.
+          - mendertesting/check_commits.sh
 
-before_deploy:
-    # Master is always lastest
-    - if [ ! -z "$TRAVIS_TAG" ]; then export IMAGE_TAG=$TRAVIS_TAG; else export IMAGE_TAG=$TRAVIS_BRANCH; fi
-    - docker tag $DOCKER_REPOSITORY $DOCKER_REPOSITORY:$IMAGE_TAG
+    - stage: Build and Push
+      env:
+          - DOCKER_REPOSITORY=mendersoftware/mender-conductor-server
+          - SERVICE_DIR=server
+      before_script:
+        # Latest commit SHA for service
+        - COMMIT=$(git log -n 1 --pretty=format:%H ./$SERVICE_DIR)
+      script:
+          # Build docker image from docker file
+          - sudo docker build -t $DOCKER_REPOSITORY ./$SERVICE_DIR
+      before_deploy:
+          # Master is always lastest
+          - if [ ! -z "$TRAVIS_TAG" ]; then export IMAGE_TAG=$TRAVIS_TAG; else export IMAGE_TAG=$TRAVIS_BRANCH; fi
+          - docker tag $DOCKER_REPOSITORY $DOCKER_REPOSITORY:$IMAGE_TAG
 
-    # Upload image to docker registry only on PUSH
-    - docker login --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
-    - docker push $DOCKER_REPOSITORY:$IMAGE_TAG
+            # Upload image to docker registry only on PUSH
+          - docker login --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
+          - docker push $DOCKER_REPOSITORY:$IMAGE_TAG
 
-    - if [ "$TRAVIS_BRANCH" = master ]; then
-        export COMMIT_TAG="$TRAVIS_BRANCH"_"$TRAVIS_COMMIT";
-        docker tag $DOCKER_REPOSITORY $DOCKER_REPOSITORY:$COMMIT_TAG;
-        docker push $DOCKER_REPOSITORY:$COMMIT_TAG;
-      fi;
+          - if [ "$TRAVIS_BRANCH" = master ]; then
+            export COMMIT_TAG="$TRAVIS_BRANCH"_"$COMMIT";
+            docker tag $DOCKER_REPOSITORY $DOCKER_REPOSITORY:$COMMIT_TAG;
+            docker push $DOCKER_REPOSITORY:$COMMIT_TAG;
+            fi;
+      deploy:
+          # Force before_deploy for branches
+          -
+              provider: script
+              script: /bin/true
+              on:
+                  all_branches: true
 
-deploy:
-    # Force before_deploy for branches
-    -
-        provider: script
-        script: /bin/true
-        on:
-            all_branches: true
+          # Force before_deploy for tags
+          -
+              provider: script
+              script: /bin/true
+              on:
+                  tags: true
+                  all_branches: true
 
-    # Force before_deploy for tags
-    -
-        provider: script
-        script: /bin/true
-        on:
-            tags: true
-            all_branches: true
+    - stage: Build and Push
+      env:
+          - DOCKER_REPOSITORY=mendersoftware/email-sender
+          - SERVICE_DIR=workers/send_email
+      before_script:
+        # Latest commit SHA for service
+        - COMMIT=$(git log -n 1 --pretty=format:%H ./$SERVICE_DIR)
+      script:
+          # Build docker image from docker file
+          - sudo docker build -t $DOCKER_REPOSITORY ./$SERVICE_DIR
+      before_deploy:
+          # Master is always lastest
+          - if [ ! -z "$TRAVIS_TAG" ]; then export IMAGE_TAG=$TRAVIS_TAG; else export IMAGE_TAG=$TRAVIS_BRANCH; fi
+          - docker tag $DOCKER_REPOSITORY $DOCKER_REPOSITORY:$IMAGE_TAG
+
+            # Upload image to docker registry only on PUSH
+          - docker login --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
+          - docker push $DOCKER_REPOSITORY:$IMAGE_TAG
+
+          - if [ "$TRAVIS_BRANCH" = master ]; then
+            export COMMIT_TAG="$TRAVIS_BRANCH"_"$COMMIT";
+            docker tag $DOCKER_REPOSITORY $DOCKER_REPOSITORY:$COMMIT_TAG;
+            docker push $DOCKER_REPOSITORY:$COMMIT_TAG;
+            fi;
+      deploy:
+          # Force before_deploy for branches
+          -
+              provider: script
+              script: /bin/true
+              on:
+                  all_branches: true
+
+          # Force before_deploy for tags
+          -
+              provider: script
+              script: /bin/true
+              on:
+                  tags: true
+                  all_branches: true
