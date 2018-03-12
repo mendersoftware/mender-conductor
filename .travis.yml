@@ -30,7 +30,7 @@ jobs:
 
     - stage: Build and Push
       env:
-          - DOCKER_REPOSITORY=mendersoftware/mender-conductor-server
+          - DOCKER_REPOSITORY=mendersoftware/mender-conductor
           - SERVICE_DIR=server
       before_script:
         # Latest commit SHA for service
