@@ -16,7 +16,5 @@ RUN pip3 install configargparse
 COPY workers /usr/bin/workers/
 
 COPY entrypoint.sh /usr/bin/entrypoint.sh
-RUN mkdir -p /var/log/supervisor
-COPY supervisord.conf /etc/supervisord.conf
 
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]

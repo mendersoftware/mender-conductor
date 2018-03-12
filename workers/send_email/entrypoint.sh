@@ -23,5 +23,5 @@ if [ "$up" -ne 1 ]; then
     exit 1
 fi
 
-/usr/bin/supervisord
+python3 /usr/bin/workers/send_email/main.py
 exit 1
