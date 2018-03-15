@@ -13,7 +13,8 @@ RUN git clone https://github.com/Netflix/conductor.git && \
 RUN pip3 install conductor/client/python
 RUN pip3 install configargparse
 
-COPY workers /usr/bin/workers/
+RUN mkdir /usr/bin/workers
+COPY worker /usr/bin/workers/send_email
 
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 
