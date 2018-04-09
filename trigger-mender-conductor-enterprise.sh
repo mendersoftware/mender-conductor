@@ -3,10 +3,14 @@ set -u -x -e
 
 body='{
 "request": {
-"branch":'"$TRAVIS_BRANCH"',
+"branch":"'"$TRAVIS_BRANCH"'",
 "config": {
-    "IMAGE_TAG": '"$IMAGE_TAG"',
-},
+    "env": {
+        "global": {
+            "IMAGE_BASE_TAG": "'"$IMAGE_TAG"'"
+         }
+    }
+}
 }}'
 
 curl -s -X POST \
