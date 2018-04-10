@@ -68,6 +68,13 @@ jobs:
                   tags: true
                   all_branches: true
 
+      after_deploy:
+          -  export TRAVIS_BRANCH IMAGE_TAG
+          -  ./trigger-mender-conductor-enterprise.sh
+
+
+
+
     - stage: Build and Push
       env:
           - DOCKER_REPOSITORY=mendersoftware/email-sender
@@ -107,3 +114,6 @@ jobs:
               on:
                   tags: true
                   all_branches: true
+
+
+
