@@ -88,18 +88,39 @@ def load_event(opts):
         event_data = inf.read()
         event = json.loads(event_data)
 
-    name = event['name']
-    logging.info('loading event %s', name)
+    action = 'POST'
 
-    # POST pushes event
-    status, resp = request(opts.conductor_address, 'POST',
+    name = event['name']
+    event = event['event']
+
+    logging.info('loading event handler %s for event %s', name, event)
+
+    # event api allows searching via 'event', not handler 'name'
+    # get all 'event' handlers, find our 'name' manually
+    status, resp = request(opts.conductor_address, 'GET',
+                           '/api/event/{}'.format(event))
+
+    if status != 200:
+        logging.error('failed to get handlers for event %s, status: %d, response: %s',
+                        event, status, resp)
+        raise SystemExit(1)
+
+    handlers = json.loads(resp.decode('utf-8'))
+    found = [h for h in handlers if h['name'] == name]
+
+    if len(found) != 0:
+        logging.info('event handler %s already present, will overwrite', name)
+        action = 'PUT'
+
+    # create/update event handler
+    status, resp = request(opts.conductor_address, action,
                         '/api/event/', body=event_data,
                         headers={'Content-Type': 'application/json'})
 
     if status == 204:
-        logging.info('event %s successfully loaded', name)
+        logging.info('event handler %s successfully loaded', name)
     else:
-        logging.error('failed to load event %s, status: %d, response: %s',
+        logging.error('failed to load event handler %s, status: %d, response: %s',
                         name, status, resp)
         raise SystemExit(1)
 
