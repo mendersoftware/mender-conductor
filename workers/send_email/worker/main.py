@@ -1,5 +1,6 @@
 import logging
 import traceback
+import os
 
 from conductor.ConductorWorker import ConductorWorker
 
@@ -8,7 +9,11 @@ import send_email
 
 logging.basicConfig()
 log = logging.getLogger('conductor-workers.send_email')
-log.setLevel(logging.INFO)
+
+if os.getenv("DEBUG"):
+    log.setLevel(logging.DEBUG)
+else:
+    log.setLevel(logging.INFO)
 
 conf = config.get_config()
 
