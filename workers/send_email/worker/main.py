@@ -26,7 +26,7 @@ def send_email_task(task):
         # always return this well formed response - status, output, logs
         return {'status': 'COMPLETED',
                 'output': {"foo": "bar"},
-                'logs': {"foo": "bar"}}
+                'logs': []} 
     except:
         log.debug("failed to run task!")
         log.fatal(traceback.format_exc())
