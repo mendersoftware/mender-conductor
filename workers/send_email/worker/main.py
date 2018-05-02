@@ -20,14 +20,17 @@ conf = config.get_config()
 
 def send_email_task(task):
     try:
+        log.debug("running task: " + str(task))
         send_email.send_email(task['inputData']['email'], task['inputData']['title'], task['inputData']['body'], conf)
 
         # always return this well formed response - status, output, logs
         return {'status': 'COMPLETED',
-                'output': {},
-                'logs': []}
+                'output': {"foo": "bar"},
+                'logs': {"foo": "bar"}}
     except:
+        log.debug("failed to run task!")
         log.fatal(traceback.format_exc())
+
         # optionally fill output/logs
         return {'status': 'FAILED',
                 'output': {},
