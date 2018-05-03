@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/bin/sh 
 
 CONDUCTOR=${CONDUCTOR="http://mender-conductor:8080"}
 
@@ -23,5 +23,5 @@ if [ "$up" -ne 1 ]; then
     exit 1
 fi
 
-python3 /usr/bin/workers/send_email/main.py
+python -u /usr/bin/workers/send_email/main.py
 exit 1
