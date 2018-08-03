@@ -3,8 +3,15 @@ sudo: required
 services:
     - docker
 
+addons:
+  apt:
+    packages:
+      - "python3"
+      - "python3-pip"
+
 stages:
     - Check commits
+    - Tests
     - Build and Push
 
 jobs:
@@ -27,6 +34,24 @@ jobs:
       script:
           # Check commit compliance.
           - mendertesting/check_commits.sh
+
+    - stage: Tests
+      name: "backend-integration"
+      install:
+        - sudo apt-get -qq update
+        - pip3 install -U --user PyYAML
+      script:
+        - git clone -b master https://github.com/mendersoftware/integration.git;
+
+        - sudo docker build -t mendersoftware/mender-conductor:pr -f server/Dockerfile ./server;
+
+        - ./integration/extra/release_tool.py --set-version-of mender-conductor --version pr;
+
+        - ./integration/backend-tests/run;
+
+    - stage: Trigger integration
+      script:
+        - echo "TODO trigger jenkins integration tests"
 
     - stage: Build and Push
       env:
@@ -72,9 +97,6 @@ jobs:
           -  export TRAVIS_BRANCH IMAGE_TAG
           -  ./trigger-mender-conductor-enterprise.sh
 
-
-
-
     - stage: Build and Push
       env:
           - DOCKER_REPOSITORY=mendersoftware/email-sender
@@ -114,6 +136,3 @@ jobs:
               on:
                   tags: true
                   all_branches: true
-
-
-
