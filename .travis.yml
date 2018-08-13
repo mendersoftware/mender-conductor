@@ -47,7 +47,7 @@ jobs:
 
         - ./integration/extra/release_tool.py --set-version-of mender-conductor --version pr;
 
-        - ./integration/backend-tests/run -k 'not multitenant';
+        - ./integration/backend-tests/run -k "'not multitenant'";
 
     - stage: Trigger integration
       script:
