@@ -1,7 +1,7 @@
 {
     "name": "decommission_device",
     "description": "Removes device info from all services.",
-    "version": 3,
+    "version": 4,
     "tasks": [
         {
             "name": "fork_join",
@@ -41,23 +41,6 @@
                         },
                         "type": "HTTP"
                     }
-                ],
-                [
-                    {
-                        "name": "delete_device_deviceadm",
-                        "taskReferenceName": "delete_device_deviceadm",
-                        "inputParameters": {
-                            "http_request": {
-                                "uri": "http://mender-device-adm:8080/api/internal/v1/admission/devices?device_id=${workflow.input.device_id}",
-                                "method": "DELETE",
-                                "headers": {
-                                    "X-MEN-RequestID": "${workflow.input.request_id}",
-                                    "Authorization": "${workflow.input.authorization}"
-                                }
-                            }
-                        },
-                        "type": "HTTP"
-                    }
                 ]
             ]
         },
@@ -66,7 +49,6 @@
             "taskReferenceName": "joinx",
             "type": "JOIN",
             "joinOn": [
-                "delete_device_deviceadm",
                 "delete_device_deployments",
                 "delete_device_inventory"
             ]
