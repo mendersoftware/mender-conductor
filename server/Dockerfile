@@ -1,4 +1,7 @@
-FROM mendersoftware/conductor:1.8.1
+FROM mendersoftware/conductor:2.2.0
+
+RUN apk update && apk add \
+    python3 bash curl
 
 # tasks
 COPY ./tasks /srv/tasks

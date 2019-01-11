@@ -45,7 +45,7 @@ def load_workflow(opts):
 
     if status == 200:
         logging.info('workflow %s version %d already present', name, version)
-    elif status == 204:
+    elif status == 404:
         logging.info('loading workflow %s version %d', name, version)
 
         status, _ = request(opts.conductor_address, 'POST',
