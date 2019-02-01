@@ -41,7 +41,7 @@ jobs:
           - SERVICE_DIR=server
       before_script:
         # Latest commit SHA for service
-        - COMMIT=$(git log -n 1 --pretty=format:%H ./$SERVICE_DIR)
+        - COMMIT=$(git log -n 1 --pretty=format:%H)
       script:
           # Build docker image from docker file
           - sudo docker build -t $DOCKER_REPOSITORY ./$SERVICE_DIR
@@ -85,7 +85,7 @@ jobs:
           - SERVICE_DIR=workers/send_email
       before_script:
         # Latest commit SHA for service
-        - COMMIT=$(git log -n 1 --pretty=format:%H ./$SERVICE_DIR)
+        - COMMIT=$(git log -n 1 --pretty=format:%H)
       script:
           # Build docker image from docker file
           - sudo docker build -t $DOCKER_REPOSITORY ./$SERVICE_DIR
