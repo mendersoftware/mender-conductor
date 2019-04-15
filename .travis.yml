@@ -51,8 +51,15 @@ jobs:
           - sudo docker build -t $DOCKER_REPOSITORY ./$SERVICE_DIR
       before_deploy:
           # Master is always lastest
-          - if [ ! -z "$TRAVIS_TAG" ]; then export IMAGE_TAG=$TRAVIS_TAG; else export IMAGE_TAG=$TRAVIS_BRANCH; fi
-          - docker tag $DOCKER_REPOSITORY $DOCKER_REPOSITORY:$IMAGE_TAG
+          - if [ ! -z "$TRAVIS_TAG" ]; then export IMAGE_TAG=$TRAVIS_TAG; else export IMAGE_TAG=$TRAVIS_BRANCH; fi ;
+          - docker tag $DOCKER_REPOSITORY $DOCKER_REPOSITORY:$IMAGE_TAG ;
+          - echo $IMAGE_TAG
+          - echo $TRAVIS_TAG
+          - echo $TRAVIS_BRANCH
+          - echo $COMMIT_TAG
+          # Print build info that binary is compiled with.
+          - echo $TRAVIS_COMMIT
+          - echo $TRAVIS_BUILD_NUMBER
 
             # Upload image to docker registry only on PUSH
           - docker login --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
@@ -60,6 +67,8 @@ jobs:
 
           - if [ "$TRAVIS_BRANCH" = master ]; then
             export COMMIT_TAG="$TRAVIS_BRANCH"_"$COMMIT";
+            echo $COMMIT
+            echo $COMMIT_TAG
             docker tag $DOCKER_REPOSITORY $DOCKER_REPOSITORY:$COMMIT_TAG;
             docker push $DOCKER_REPOSITORY:$COMMIT_TAG;
             fi;
