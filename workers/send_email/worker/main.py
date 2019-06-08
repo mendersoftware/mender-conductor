@@ -18,21 +18,19 @@ log = logging.getLogger()
 
 def send_email_task(task):
     try:
-        log.info("running task: " + str(task))
-        send_email.send_email(task['inputData']['email'], task['inputData']['title'], task['inputData']['body'])
+        log.info("executing task: " + str(task))
+        if not send_email.send_email(task['inputData']['email'], task['inputData']['title'], task['inputData']['body']):
+            return {'status': 'FAILED', 'output': {}, 'logs': []}
 
         # always return this well formed response - status, output, logs
-        return {'status': 'COMPLETED',
-                'output': {},
-                'logs': []}
+        return {'status': 'COMPLETED', 'output': {}, 'logs': []}
+
     except:
         log.error("failed to run task: " + str(task))
         log.fatal(traceback.format_exc())
 
         # optionally fill output/logs
-        return {'status': 'FAILED',
-                'output': {},
-                'logs': []}
+        return {'status': 'FAILED', 'output': {}, 'logs': []}
 
 
 def main():
