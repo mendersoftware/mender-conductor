@@ -1,34 +1,32 @@
 import logging
 import traceback
-import os
 
 from conductor.ConductorWorker import ConductorWorker
 
 import config
 import send_email
 
-logging.basicConfig()
-log = logging.getLogger('conductor-workers.send_email')
-
-if os.getenv("DEBUG"):
-    log.setLevel(logging.DEBUG)
-else:
-    log.setLevel(logging.INFO)
-
 conf = config.get_config()
+
+logs_format='[%(asctime)s] [%(levelname)-8s] %(message)s'
+if conf.debug:
+    logging.basicConfig(format=logs_format, level=logging.DEBUG)
+else:
+    logging.basicConfig(format=logs_format, level=logging.INFO)
+log = logging.getLogger()
 
 
 def send_email_task(task):
     try:
-        log.debug("running task: " + str(task))
-        send_email.send_email(task['inputData']['email'], task['inputData']['title'], task['inputData']['body'], conf)
+        log.info("running task: " + str(task))
+        send_email.send_email(task['inputData']['email'], task['inputData']['title'], task['inputData']['body'])
 
         # always return this well formed response - status, output, logs
         return {'status': 'COMPLETED',
                 'output': {},
-                'logs': []} 
+                'logs': []}
     except:
-        log.debug("failed to run task!")
+        log.error("failed to run task: " + str(task))
         log.fatal(traceback.format_exc())
 
         # optionally fill output/logs

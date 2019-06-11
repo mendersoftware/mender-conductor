@@ -10,4 +10,5 @@ def get_config():
     p.add('--emailsender', required=False, help='Email FROM field', env_var='EMAIL_SENDER')
     p.add('--smtpssl', required=False, help='Should SSL be turned on', env_var='SMTP_SSL')
     p.add('--demo', required=False, help='Demo mode', env_var='DEMO')
+    p.add('--debug', required=False, help='Enable debug logging', env_var='DEBUG', default=False)
     return p.parse_args()
