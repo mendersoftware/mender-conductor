@@ -35,11 +35,14 @@ def send_email(recipient, title, body):
 
         log.debug("Sending email..")
         server.sendmail(conf.emailsender, recipient, message.encode("UTF8"), ['SMTPUTF8'])
-        log.debug("Email sent!")
+        log.info("Email successfully sent to '%s'" % recipient)
 
-        server.quit()
-        log.debug("Done.")
+        return True
 
     except:
         log.error("Failed to send message to '%s'" % recipient)
         log.fatal(traceback.format_exc())
+        return False
+
+    finally:
+        server.quit()
