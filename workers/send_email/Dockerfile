@@ -6,7 +6,7 @@ RUN apk update && apk add \
 
 RUN git clone https://github.com/Netflix/conductor.git && \
     cd conductor/client/python && \
-    git checkout v1.8.9
+    git checkout v2.12.4
 
 RUN pip install conductor/client/python
 RUN pip install configargparse
