@@ -15,7 +15,9 @@
                     "headers": {
                         "X-MEN-RequestID": "${workflow.input.request_id}",
                         "Authorization": "${workflow.input.authorization}"
-                    }
+                    },
+                    "connectionTimeOut":"1000",
+                    "readTimeOut":"1000"
                 }
             },
             "type": "HTTP"
