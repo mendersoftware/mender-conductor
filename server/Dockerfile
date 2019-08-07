@@ -1,7 +1,13 @@
-FROM mendersoftware/conductor:2.11.0-1-mender
+FROM mendersoftware/conductor:2.11.0
 
 RUN apk update && apk add \
     python3 bash curl
+
+# configs
+COPY ./config/* /app/config/
+
+# startup scirpt
+COPY ./docker/startup.sh /app/
 
 # tasks
 COPY ./tasks /srv/tasks
