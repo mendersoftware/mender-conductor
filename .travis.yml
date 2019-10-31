@@ -33,11 +33,12 @@ jobs:
             # Get last remaining tags, if any.
           - git fetch --tags origin
 
-          - git clone git://github.com/mendersoftware/mendertesting
+          - git clone git://github.com/mendersoftware/mendertesting /tmp/mendertesting
 
       script:
           # Check commit compliance.
-          - mendertesting/check_commits.sh
+          - /tmp/mendertesting/check_commits.sh
+          - /tmp/mendertesting/check_license.sh
 
     - stage: Build and Push
       env:
