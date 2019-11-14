@@ -39,6 +39,8 @@ def main():
 
     cc.start('send_email', send_email_task, True)
 
+    return 1
+
 
 if __name__ == '__main__':
-    main()
+    exit(main())

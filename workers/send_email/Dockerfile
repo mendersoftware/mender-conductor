@@ -1,19 +1,18 @@
 FROM python:2.7.14-alpine3.7
 
-RUN apk update && apk add \
-    git \
-    curl 
-
-RUN git clone https://github.com/Netflix/conductor.git && \
-    cd conductor/client/python && \
-    git checkout v2.12.4
-
-RUN pip install conductor/client/python
-RUN pip install configargparse
-
-RUN mkdir /usr/bin/workers
+COPY patches /patches
 COPY worker /usr/bin/workers/send_email
 
-COPY entrypoint.sh /usr/bin/entrypoint.sh
+RUN apk update && \
+    apk add --no-cache git && \
+    git clone https://github.com/Netflix/conductor.git && \
+    cd /conductor && \
+    git checkout v2.12.4 && \
+    for file in $(ls -1 /patches/); do git apply /patches/$file; done && \
+    pip install --no-cache-dir --disable-pip-version-check /conductor/client/python && \
+    pip install --no-cache-dir --disable-pip-version-check configargparse && \
+    rm -rf /conductor && \
+    rm -rf /patches && \
+    apk del git
 
-ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+CMD ["/usr/local/bin/python2.7", "-u", "/usr/bin/workers/send_email/main.py"]

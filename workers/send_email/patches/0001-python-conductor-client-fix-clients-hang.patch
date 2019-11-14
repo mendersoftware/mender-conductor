@@ -1,0 +1,70 @@
+From eed12b05e3feb9466538920158b2b3deb6fc88fc Mon Sep 17 00:00:00 2001
+From: Oleksandr Miliukov <oleksandr.miliukov@northern.tech>
+Date: Mon, 11 Nov 2019 13:36:34 +0100
+Subject: [PATCH] python conductor client fix client's hang
+
+After TCP connection established client waited for a data from
+server forewer. This is corner case which we often faced with
+when conductor's pod was restarted.
+---
+ client/python/conductor/conductor.py | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/client/python/conductor/conductor.py b/client/python/conductor/conductor.py
+index 04cea5c0..c253e3cf 100644
+--- a/client/python/conductor/conductor.py
++++ b/client/python/conductor/conductor.py
+@@ -22,6 +22,7 @@ import warnings
+ 
+ 
+ hostname = socket.gethostname()
++connection_timeout = 10
+ 
+ 
+ class BaseClient(object):
+@@ -34,7 +35,7 @@ class BaseClient(object):
+ 
+     def get(self, resPath, queryParams=None):
+         theUrl = "{}/{}".format(self.baseURL, resPath)
+-        resp = requests.get(theUrl, params=queryParams)
++        resp = requests.get(theUrl, params=queryParams, timeout=connection_timeout)
+         self.__checkForSuccess(resp)
+         if(resp.content == b''):
+             return None
+@@ -48,9 +49,10 @@ class BaseClient(object):
+             theHeader = self.mergeTwoDicts(self.headers, headers)
+         if body is not None:
+             jsonBody = json.dumps(body, ensure_ascii=False)
+-            resp = requests.post(theUrl, params=queryParams, data=jsonBody, headers=theHeader)
++            resp = requests.post(theUrl, params=queryParams, data=jsonBody, headers=theHeader,
++                                 timeout=connection_timeout)
+         else:
+-            resp = requests.post(theUrl, params=queryParams, headers=theHeader)
++            resp = requests.post(theUrl, params=queryParams, headers=theHeader, timeout=connection_timeout)
+ 
+         self.__checkForSuccess(resp)
+         return self.__return(resp, theHeader)
+@@ -63,16 +65,17 @@ class BaseClient(object):
+ 
+         if body is not None:
+             jsonBody = json.dumps(body, ensure_ascii=False)
+-            resp = requests.put(theUrl, params=queryParams, data=jsonBody, headers=theHeader)
++            resp = requests.put(theUrl, params=queryParams, data=jsonBody, headers=theHeader,
++                                timeout=connection_timeout)
+         else:
+-            resp = requests.put(theUrl, params=queryParams, headers=theHeader)
++            resp = requests.put(theUrl, params=queryParams, headers=theHeader, timeout=connection_timeout)
+ 
+         self.__print(resp)
+         self.__checkForSuccess(resp)
+ 
+     def delete(self, resPath, queryParams):
+         theUrl = "{}/{}".format(self.baseURL, resPath)
+-        resp = requests.delete(theUrl, params=queryParams)
++        resp = requests.delete(theUrl, params=queryParams, timeout=connection_timeout)
+         self.__print(resp)
+         self.__checkForSuccess(resp)
+ 
+-- 
+2.23.0
+

@@ -1,0 +1,39 @@
+From 56085ff71220c57e5cc390a83a65dbc8bb989c27 Mon Sep 17 00:00:00 2001
+From: Oleksandr Miliukov <oleksandr.miliukov@northern.tech>
+Date: Mon, 11 Nov 2019 13:44:56 +0100
+Subject: [PATCH] python conductor client: fix main thread keep alive
+
+Client library holded main thread even if all worker threads are
+dead.
+---
+ client/python/conductor/ConductorWorker.py | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/client/python/conductor/ConductorWorker.py b/client/python/conductor/ConductorWorker.py
+index cd99e241..60fce908 100644
+--- a/client/python/conductor/ConductorWorker.py
++++ b/client/python/conductor/ConductorWorker.py
+@@ -116,13 +116,18 @@ class ConductorWorker:
+             By default, it is set to None
+         """
+         print('Polling for task %s at a %f ms interval with %d threads for task execution, with worker id as %s' % (taskType, self.polling_interval * 1000, self.thread_count, self.worker_id))
++        threads = []
+         for x in range(0, int(self.thread_count)):
+             thread = Thread(target=self.poll_and_execute, args=(taskType, exec_function, domain,))
+             thread.daemon = True
+             thread.start()
++            threads.append(thread)
+         if wait:
+-            while 1:
+-                time.sleep(1)
++            while len(threads) > 0:
++                time.sleep(5)
++                for t in threads[:]:
++                    if not t.isAlive():
++                        threads.remove(t)
+ 
+ 
+ def exc(taskType, inputData, startTime, retryCount, status, callbackAfterSeconds, pollCount):
+-- 
+2.23.0
+
