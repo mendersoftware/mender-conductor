@@ -1,4 +1,4 @@
-FROM mendersoftware/conductor:2.11.0
+FROM mendersoftware/conductor:2.11.0-es6
 
 RUN apk update && apk add \
     python3 bash curl
