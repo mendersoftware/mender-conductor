@@ -9,7 +9,8 @@ echo "-- conductor API is at ${CONDUCTOR}"
 
 # wait for conductor
 tries=0
-while [ "$tries" -lt 20 ]; do
+max_tries=255
+while [ ${tries} -lt ${max_tries} ]; do
     if ! curl -f "${CONDUCTOR}/api/metadata/taskdefs" > /dev/null 2>&1 ; then
         tries=$((tries + 1))
         echo "-- $(date) waiting for conductor, attempt ${tries}"
