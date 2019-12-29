@@ -20,8 +20,8 @@
                                     "X-MEN-RequestID": "${workflow.input.request_id}",
                                     "Authorization": "${workflow.input.authorization}"
                                 },
-                                "connectionTimeOut":"32000",
-                                "readTimeOut":"32000"
+                                 "connectionTimeOut":"32000000",
+                                "readTimeOut":"32000000"
                             }
                         },
                         "type": "HTTP"
@@ -39,8 +39,8 @@
                                     "X-MEN-RequestID": "${workflow.input.request_id}",
                                     "Authorization": "${workflow.input.authorization}"
                                 },
-                                "connectionTimeOut":"32000",
-                                "readTimeOut":"32000"
+                                "connectionTimeOut":"32000000",
+                                "readTimeOut":"32000000"
                             }
                         },
                         "type": "HTTP"
