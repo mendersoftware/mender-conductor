@@ -18,6 +18,12 @@ if [ -z "$CONFIG_PROP" ];
     export config_file=/app/config/$CONFIG_PROP
 fi
 
-echo "Using /app/config/log4j.properties";
-
+echo "Using $config_file /app/config/log4j.properties";
+es_url=`cat "${config_file}" | grep ^workflow.elasticsearch.url= | cut -f2 -d=`
+if [ "${es_url}" != "" ]; then
+ while ! nc -z -v "${es_url}"; do
+  echo "`date` waiting for ES to be ready at $es_url";
+  sleep 1;
+ done;
+fi;
 java $CONDUCTOR_JAVA_OPTS -jar conductor-server-*-all.jar $config_file /app/config/log4j.properties
